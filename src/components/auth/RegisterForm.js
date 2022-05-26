@@ -1,7 +1,8 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
+import { ErrorContext } from '../../contexts/ErrorContext';
 
-function RegisterForm() {
+function RegisterForm({ closeModal }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -9,19 +10,26 @@ function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const { signUp } = useContext(AuthContext);
+  const { setError, setTrigger } = useContext(ErrorContext);
 
   const handleSubmitSignUp = async e => {
-    e.preventDefault();
-    // validate input first
+    try {
+      e.preventDefault();
+      // validate input first
 
-    // end validate
-    await signUp({
-      firstName,
-      lastName,
-      emailOrPhone,
-      password,
-      confirmPassword
-    });
+      // end validate
+      await signUp({
+        firstName,
+        lastName,
+        emailOrPhone,
+        password,
+        confirmPassword
+      });
+
+      closeModal();
+    } catch (err) {
+      setError(err.response.data.message);
+    }
   };
 
   return (
