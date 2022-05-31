@@ -21,7 +21,9 @@ function PostContextProvider({ children }) {
   }, []);
 
   return (
-    <PostContext.Provider value={{ posts }}>{children}</PostContext.Provider>
+    <PostContext.Provider value={{ posts, dispatch }}>
+      {children}
+    </PostContext.Provider>
   );
 }
 
